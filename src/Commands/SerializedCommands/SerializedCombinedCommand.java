@@ -1,26 +1,18 @@
 package Commands.SerializedCommands;
 
 import Commands.Command;
+import Commands.SerializedCommand;
 
 import java.io.Serializable;
 
-public class SerializedCombinedCommand implements Serializable {
-    private Command command;
+public class SerializedCombinedCommand extends SerializedCommand implements Serializable {
     private Object object;
     private String arg;
-    private String login;
-    private String password;
 
     public SerializedCombinedCommand(Command command, Object object, String arg, String login, String password) {
-        this.command = command;
+        super(command, login, password);
         this.object = object;
         this.arg = arg;
-        this.login = login;
-        this.password = password;
-    }
-
-    public Command getCommand() {
-        return command;
     }
 
     public Object getObject() {
@@ -29,13 +21,5 @@ public class SerializedCombinedCommand implements Serializable {
 
     public String getArg() {
         return arg;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public String getLogin() {
-        return login;
     }
 }

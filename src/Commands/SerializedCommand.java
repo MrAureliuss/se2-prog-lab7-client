@@ -1,15 +1,13 @@
-package Commands.SerializedCommands;
-
-import Commands.Command;
+package Commands;
 
 import java.io.Serializable;
 
-public class SerializedSimplyCommand implements Serializable {
+public class SerializedCommand implements Serializable {
     private Command command;
     private String login;
     private String password;
 
-    public SerializedSimplyCommand(Command command, String login, String password) {
+    public SerializedCommand(Command command, String login, String password) {
         this.command = command;
         this.login = login;
         this.password = password;
@@ -27,3 +25,4 @@ public class SerializedSimplyCommand implements Serializable {
         return login;
     }
 }
+

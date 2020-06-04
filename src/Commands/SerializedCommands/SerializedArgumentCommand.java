@@ -1,35 +1,19 @@
 package Commands.SerializedCommands;
 
 import Commands.Command;
+import Commands.SerializedCommand;
 
 import java.io.Serializable;
 
-public class SerializedArgumentCommand implements Serializable {
-    private Command command;
+public class SerializedArgumentCommand extends SerializedCommand implements Serializable {
     private String arg;
-    private String login;
-    private String password;
 
     public SerializedArgumentCommand(Command command, String arg, String login, String password) {
-        this.command = command;
+        super(command, login, password);
         this.arg = arg;
-        this.login = login;
-        this.password = password;
-    }
-
-    public Command getCommand() {
-        return command;
     }
 
     public String getArg() {
         return arg;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public String getPassword() {
-        return password;
     }
 }

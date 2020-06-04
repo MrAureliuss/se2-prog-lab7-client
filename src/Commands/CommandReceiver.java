@@ -8,7 +8,6 @@ import Commands.ConcreteCommands.*;
 import Commands.SerializedCommands.SerializedArgumentCommand;
 import Commands.SerializedCommands.SerializedCombinedCommand;
 import Commands.SerializedCommands.SerializedObjectCommand;
-import Commands.SerializedCommands.SerializedSimplyCommand;
 import Commands.Utils.Creaters.ElementCreator;
 
 import java.io.*;
@@ -43,13 +42,13 @@ public class CommandReceiver {
     }
 
     public void info() throws IOException, ClassNotFoundException, InterruptedException {
-        sender.sendObject(new SerializedSimplyCommand(new Info(), login, password));
+        sender.sendObject(new SerializedCommand(new Info(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
 
     public void show() throws IOException, ClassNotFoundException, InterruptedException {
-        sender.sendObject(new SerializedSimplyCommand(new Show(), login, password));
+        sender.sendObject(new SerializedCommand(new Show(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
@@ -81,7 +80,7 @@ public class CommandReceiver {
     }
 
     public void clear() throws IOException, InterruptedException, ClassNotFoundException {
-        sender.sendObject(new SerializedSimplyCommand(new Clear(), login, password));
+        sender.sendObject(new SerializedCommand(new Clear(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
@@ -93,7 +92,7 @@ public class CommandReceiver {
     }
 
     public void head() throws IOException, InterruptedException, ClassNotFoundException {
-       sender.sendObject(new SerializedSimplyCommand(new Head(), login, password));
+       sender.sendObject(new SerializedCommand(new Head(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
@@ -111,13 +110,13 @@ public class CommandReceiver {
     }
 
     public void minBySemesterEnum() throws IOException, InterruptedException, ClassNotFoundException {
-        sender.sendObject(new SerializedSimplyCommand(new MinBySemesterEnum(), login, password));
+        sender.sendObject(new SerializedCommand(new MinBySemesterEnum(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
 
     public void maxByGroupAdmin() throws IOException, InterruptedException, ClassNotFoundException {
-        sender.sendObject(new SerializedSimplyCommand(new MaxByGroupAdmin(), login, password));
+        sender.sendObject(new SerializedCommand(new MaxByGroupAdmin(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
