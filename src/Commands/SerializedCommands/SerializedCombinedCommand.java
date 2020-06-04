@@ -8,11 +8,15 @@ public class SerializedCombinedCommand implements Serializable {
     private Command command;
     private Object object;
     private String arg;
+    private String login;
+    private String password;
 
-    public SerializedCombinedCommand(Command command, Object object, String arg) {
+    public SerializedCombinedCommand(Command command, Object object, String arg, String login, String password) {
         this.command = command;
         this.object = object;
         this.arg = arg;
+        this.login = login;
+        this.password = password;
     }
 
     public Command getCommand() {
@@ -25,5 +29,13 @@ public class SerializedCombinedCommand implements Serializable {
 
     public String getArg() {
         return arg;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getLogin() {
+        return login;
     }
 }

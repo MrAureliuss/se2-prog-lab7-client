@@ -43,19 +43,19 @@ public class CommandReceiver {
     }
 
     public void info() throws IOException, ClassNotFoundException, InterruptedException {
-        sender.sendObject(new SerializedSimplyCommand(new Info()));
+        sender.sendObject(new SerializedSimplyCommand(new Info(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
 
     public void show() throws IOException, ClassNotFoundException, InterruptedException {
-        sender.sendObject(new SerializedSimplyCommand(new Show()));
+        sender.sendObject(new SerializedSimplyCommand(new Show(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
 
     public void add() throws IOException, InterruptedException, ClassNotFoundException {
-        sender.sendObject(new SerializedObjectCommand(new Add(), elementCreator.createStudyGroup()));
+        sender.sendObject(new SerializedObjectCommand(new Add(), elementCreator.createStudyGroup(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
@@ -65,7 +65,7 @@ public class CommandReceiver {
      * @param ID - апдейт элемента по ID.
      */
     public void update(String ID) throws IOException, InterruptedException, ClassNotFoundException {
-        sender.sendObject(new SerializedCombinedCommand(new Update(), elementCreator.createStudyGroup(), ID));
+        sender.sendObject(new SerializedCombinedCommand(new Update(), elementCreator.createStudyGroup(), ID, login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
@@ -75,13 +75,13 @@ public class CommandReceiver {
      * @param ID - удаление по ID.
      */
     public void removeById(String ID) throws IOException, InterruptedException, ClassNotFoundException {
-        sender.sendObject(new SerializedArgumentCommand(new RemoveByID(), ID));
+        sender.sendObject(new SerializedArgumentCommand(new RemoveByID(), ID, login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
 
     public void clear() throws IOException, InterruptedException, ClassNotFoundException {
-        sender.sendObject(new SerializedSimplyCommand(new Clear()));
+        sender.sendObject(new SerializedSimplyCommand(new Clear(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
@@ -93,37 +93,37 @@ public class CommandReceiver {
     }
 
     public void head() throws IOException, InterruptedException, ClassNotFoundException {
-       sender.sendObject(new SerializedSimplyCommand(new Head()));
+       sender.sendObject(new SerializedSimplyCommand(new Head(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
 
     public void removeGreater() throws IOException, InterruptedException, ClassNotFoundException {
-        sender.sendObject(new SerializedObjectCommand(new RemoveGreater(), elementCreator.createStudyGroup()));
+        sender.sendObject(new SerializedObjectCommand(new RemoveGreater(), elementCreator.createStudyGroup(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
 
     public void removeLower() throws IOException, ClassNotFoundException, InterruptedException {
-        sender.sendObject(new SerializedObjectCommand(new RemoveLower(), elementCreator.createStudyGroup()));
+        sender.sendObject(new SerializedObjectCommand(new RemoveLower(), elementCreator.createStudyGroup(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
 
     public void minBySemesterEnum() throws IOException, InterruptedException, ClassNotFoundException {
-        sender.sendObject(new SerializedSimplyCommand(new MinBySemesterEnum()));
+        sender.sendObject(new SerializedSimplyCommand(new MinBySemesterEnum(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
 
     public void maxByGroupAdmin() throws IOException, InterruptedException, ClassNotFoundException {
-        sender.sendObject(new SerializedSimplyCommand(new MaxByGroupAdmin()));
+        sender.sendObject(new SerializedSimplyCommand(new MaxByGroupAdmin(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
 
     public void countByGroupAdmin() throws IOException, InterruptedException, ClassNotFoundException {
-        sender.sendObject(new SerializedObjectCommand(new CountByGroupAdmin(), elementCreator.createPerson()));
+        sender.sendObject(new SerializedObjectCommand(new CountByGroupAdmin(), elementCreator.createPerson(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
@@ -147,22 +147,22 @@ public class CommandReceiver {
                     if (studyGroup != null) {
                         switch (command.split(" ")[0]) {
                             case "add":
-                                sender.sendObject(new SerializedObjectCommand(new Add(), studyGroup));
+                                sender.sendObject(new SerializedObjectCommand(new Add(), studyGroup, login, password));
                                 Thread.sleep(delay);
                                 Receiver.receive(socketChannel);
                                 break;
                             case "update":
-                                sender.sendObject(new SerializedCombinedCommand(new Update(), elementCreator.createStudyGroup(), command.split(" ")[1]));
+                                sender.sendObject(new SerializedCombinedCommand(new Update(), elementCreator.createStudyGroup(), command.split(" ")[1], login, password));
                                 Thread.sleep(delay);
                                 Receiver.receive(socketChannel);
                                 break;
                             case "remove_greater":
-                                sender.sendObject(new SerializedObjectCommand(new RemoveGreater(), studyGroup));
+                                sender.sendObject(new SerializedObjectCommand(new RemoveGreater(), studyGroup, login, password));
                                 Thread.sleep(delay);
                                 Receiver.receive(socketChannel);
                                 break;
                             case "remove_lower":
-                                sender.sendObject(new SerializedObjectCommand(new RemoveLower(), studyGroup));
+                                sender.sendObject(new SerializedObjectCommand(new RemoveLower(), studyGroup, login, password));
                                 Thread.sleep(delay);
                                 Receiver.receive(socketChannel);
                                 break;
@@ -178,7 +178,7 @@ public class CommandReceiver {
                     }
                     Person person = elementCreator.createScriptPerson(parameters);
                     if (person != null) {
-                        sender.sendObject(new SerializedObjectCommand(new CountByGroupAdmin(), person));
+                        sender.sendObject(new SerializedObjectCommand(new CountByGroupAdmin(), person, login, password));
                         Thread.sleep(delay);
                         Receiver.receive(socketChannel);
                     }

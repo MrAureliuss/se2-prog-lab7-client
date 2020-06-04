@@ -10,9 +10,11 @@ public class SerializedArgumentCommand implements Serializable {
     private String login;
     private String password;
 
-    public SerializedArgumentCommand(Command command, String arg) {
+    public SerializedArgumentCommand(Command command, String arg, String login, String password) {
         this.command = command;
         this.arg = arg;
+        this.login = login;
+        this.password = password;
     }
 
     public Command getCommand() {
