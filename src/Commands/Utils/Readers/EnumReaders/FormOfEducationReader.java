@@ -9,7 +9,7 @@ import java.util.Scanner;
  */
 public class FormOfEducationReader {
     public static boolean checkExist(String toContains) {
-        return Arrays.stream(FormOfEducation.values()).anyMatch((formOfEducation) -> formOfEducation.name().equals(toContains));
+        return Arrays.stream(FormOfEducation.values()).anyMatch((formOfEducation) -> formOfEducation.name().equals(toContains.toUpperCase()));
     }
 
     public static FormOfEducation read(boolean canBeNull) {

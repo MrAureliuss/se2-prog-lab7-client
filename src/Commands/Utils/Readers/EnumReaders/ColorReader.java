@@ -9,7 +9,7 @@ import java.util.Scanner;
  */
 public class ColorReader {
     public static boolean checkExist(String toContains) {
-        return Arrays.stream(Color.values()).anyMatch((color) -> color.name().equals(toContains));
+        return Arrays.stream(Color.values()).anyMatch((color) -> color.name().equals(toContains.toUpperCase()));
     }
 
     public static Color read(String messageForConsole, boolean canBeNull) {

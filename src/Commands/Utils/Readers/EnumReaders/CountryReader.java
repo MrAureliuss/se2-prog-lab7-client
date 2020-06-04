@@ -9,7 +9,7 @@ import java.util.Scanner;
  */
 public class CountryReader {
     public static boolean checkExist(String toContains) {
-        return Arrays.stream(Country.values()).anyMatch((country) -> country.name().equals(toContains));
+        return Arrays.stream(Country.values()).anyMatch((country) -> country.name().equals(toContains.toUpperCase()));
     }
 
     public static Country read(String messageForConsole, boolean canBeNull) {

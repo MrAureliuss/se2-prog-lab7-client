@@ -9,7 +9,7 @@ import java.util.Scanner;
  */
 public class SemesterReader {
     public static boolean checkExist(String toContains) {
-        return Arrays.stream(Semester.values()).anyMatch((semester) -> semester.name().equals(toContains));
+        return Arrays.stream(Semester.values()).anyMatch((semester) -> semester.name().equals(toContains.toUpperCase()));
     }
 
     public static Semester read(boolean canBeNull) {

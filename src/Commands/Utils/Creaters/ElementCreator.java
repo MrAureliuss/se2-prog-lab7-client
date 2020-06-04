@@ -42,13 +42,14 @@ public class ElementCreator {
     public StudyGroup createScriptStudyGroup(ArrayList<String> parameters) {
         if (validateArrayStudyGroup(parameters)) {
             FormOfEducation formOfEducation = null;
-            if (!parameters.get(4).isEmpty()) { formOfEducation = FormOfEducation.valueOf(parameters.get(4)); }
+            if (!parameters.get(4).isEmpty()) { formOfEducation = FormOfEducation.valueOf(parameters.get(4).toUpperCase()); }
             return new StudyGroup(parameters.get(0),
                     new Coordinates(Integer.parseInt(parameters.get(1)), Float.parseFloat(parameters.get(2))),
                     Integer.parseInt(parameters.get(3)),
                     formOfEducation,
-                    Semester.valueOf(parameters.get(5)),
-                    new Person(parameters.get(6), Integer.parseInt(parameters.get(7)), Color.valueOf(parameters.get(8)), Color.valueOf(parameters.get(9)), Country.valueOf(parameters.get(10))));
+                    Semester.valueOf(parameters.get(5).toUpperCase()),
+                    new Person(parameters.get(6), Integer.parseInt(parameters.get(7)), Color.valueOf(parameters.get(8).toUpperCase()),
+                            Color.valueOf(parameters.get(9).toUpperCase()), Country.valueOf(parameters.get(10).toUpperCase())));
         } else { System.out.println("Один из параметров не соответствует требованиям."); }
 
         return null;
@@ -56,7 +57,8 @@ public class ElementCreator {
 
     public Person createScriptPerson(ArrayList<String> parameters) {
         if (validateArrayPerson(parameters)) {
-            return new Person(parameters.get(0), Integer.parseInt(parameters.get(1)), Color.valueOf(parameters.get(2)), Color.valueOf(parameters.get(3)), Country.valueOf(parameters.get(4)));
+            return new Person(parameters.get(0), Integer.parseInt(parameters.get(1)), Color.valueOf(parameters.get(2).toUpperCase()),
+                    Color.valueOf(parameters.get(3).toUpperCase()), Country.valueOf(parameters.get(4).toUpperCase()));
         } else { System.out.println("Один из параметров не соответствует требованиям."); }
 
         return null;
