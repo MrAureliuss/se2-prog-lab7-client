@@ -7,14 +7,13 @@ import Client.Session;
 import Commands.Utils.Creaters.ElementCreator;
 
 import java.io.IOException;
-import java.net.ConnectException;
 import java.util.Scanner;
 
 /**
  * Класс управления и регистрацией консолью.
  */
 class ConsoleManager {
-    void startInteractiveMode(String hostName, String port, String delayArg) throws IOException {
+    void startInteractiveMode(String hostName, String port, String delayArg, String login, String password) throws IOException {
         Session session = null;
         int delay = 0;
 
@@ -35,7 +34,7 @@ class ConsoleManager {
 
         ElementCreator elementCreator = new ElementCreator();
         CommandInvoker commandInvoker = new CommandInvoker();
-        CommandReceiver commandReceiver = new CommandReceiver(commandInvoker, sender, session.getSocketChannel(), delay, elementCreator);
+        CommandReceiver commandReceiver = new CommandReceiver(commandInvoker, sender, session.getSocketChannel(), delay, elementCreator, login, password);
 
         commandInvoker.register("help", new Help(commandReceiver));
         commandInvoker.register("add", new Add(commandReceiver));

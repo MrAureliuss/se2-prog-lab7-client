@@ -24,13 +24,18 @@ public class CommandReceiver {
     private final SocketChannel socketChannel;
     private final Integer delay;
     private final ElementCreator elementCreator;
+    private final String login;
+    private final String password;
 
-    public CommandReceiver(CommandInvoker commandInvoker, Sender sender, SocketChannel socketChannel, Integer delay, ElementCreator elementCreator) {
+    public CommandReceiver(CommandInvoker commandInvoker, Sender sender, SocketChannel socketChannel,
+                           Integer delay, ElementCreator elementCreator, String login, String password) {
         this.commandInvoker = commandInvoker;
         this.sender = sender;
         this.socketChannel = socketChannel;
         this.delay = delay;
         this.elementCreator = elementCreator;
+        this.login = login;
+        this.password = password;
     }
 
     public void help() {
