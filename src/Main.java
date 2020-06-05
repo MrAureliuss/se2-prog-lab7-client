@@ -1,7 +1,7 @@
 import java.io.*;
 
 public class Main {
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException {
         try {
             ConsoleManager consoleManager = new ConsoleManager();
             consoleManager.startInteractiveMode(args[0], args[1], args[2], args[3], args[4]);
