@@ -5,6 +5,7 @@ import Commands.ConcreteCommands.*;
 
 import Client.Session;
 import Commands.Utils.Creaters.ElementCreator;
+import Commands.Utils.Readers.PrimitiveAndReferenceReaders.LoginPassReader;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -13,7 +14,7 @@ import java.util.Scanner;
  * Класс управления и регистрацией консолью.
  */
 class ConsoleManager {
-    void startInteractiveMode(String hostName, String port, String delayArg, String login, String password) throws IOException {
+    void startInteractiveMode(String hostName, String port, String delayArg, String login, String password) throws IOException, ClassNotFoundException, InterruptedException {
         Session session = null;
         int delay = 0;
 
@@ -35,6 +36,12 @@ class ConsoleManager {
         ElementCreator elementCreator = new ElementCreator();
         CommandInvoker commandInvoker = new CommandInvoker();
         CommandReceiver commandReceiver = new CommandReceiver(commandInvoker, sender, session.getSocketChannel(), delay, elementCreator, login, password);
+
+        //LoginPassReader loginPassReader = new LoginPassReader(commandReceiver);
+        //String[] data = loginPassReader.tryAuthOrRegistration();
+        //login = data[0];
+        //password = data[1];
+        //commandReceiver.registerOrAuth(login, password, "auth");
 
         commandInvoker.register("help", new Help(commandReceiver));
         commandInvoker.register("add", new Add(commandReceiver));

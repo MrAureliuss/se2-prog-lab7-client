@@ -8,6 +8,7 @@ import Commands.ConcreteCommands.*;
 import Commands.SerializedCommands.SerializedArgumentCommand;
 import Commands.SerializedCommands.SerializedCombinedCommand;
 import Commands.SerializedCommands.SerializedObjectCommand;
+import Commands.SerializedCommands.SerializedAuthOrRegisterCommand;
 import Commands.Utils.Creaters.ElementCreator;
 
 import java.io.*;
@@ -123,6 +124,12 @@ public class CommandReceiver {
 
     public void countByGroupAdmin() throws IOException, InterruptedException, ClassNotFoundException {
         sender.sendObject(new SerializedObjectCommand(new CountByGroupAdmin(), elementCreator.createPerson(), login, password));
+        Thread.sleep(delay);
+        Receiver.receive(socketChannel);
+    }
+
+    public void registerOrAuth(String login, String password, String type) throws IOException, InterruptedException, ClassNotFoundException {
+        sender.sendObject(new SerializedAuthOrRegisterCommand(new Register(), login, password, type));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
