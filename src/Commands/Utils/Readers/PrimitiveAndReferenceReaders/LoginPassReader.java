@@ -34,7 +34,7 @@ public class LoginPassReader {
                 password = new String(passwordArray);
             } while (!Arrays.equals(passwordArray, passwordArrayCheck));
 
-            commandReceiver.registerOrAuth(login, password, "register");
+            commandReceiver.register(login, password);
         } else { System.out.println("Такого варианта нет. В следующий раз будь осторожнее. Пока!"); System.exit(0);}
 
         return new String[] {login, password};

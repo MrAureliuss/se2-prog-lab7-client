@@ -5,6 +5,7 @@ import Commands.ConcreteCommands.*;
 
 import Client.Session;
 import Commands.Utils.Creaters.ElementCreator;
+import Commands.Utils.HashEncrypter;
 import Commands.Utils.Readers.PrimitiveAndReferenceReaders.LoginPassReader;
 
 import java.io.IOException;
@@ -35,13 +36,13 @@ class ConsoleManager {
 
         ElementCreator elementCreator = new ElementCreator();
         CommandInvoker commandInvoker = new CommandInvoker();
-        CommandReceiver commandReceiver = new CommandReceiver(commandInvoker, sender, session.getSocketChannel(), delay, elementCreator, login, password);
 
-        //LoginPassReader loginPassReader = new LoginPassReader(commandReceiver);
-        //String[] data = loginPassReader.tryAuthOrRegistration();
-        //login = data[0];
-        //password = data[1];
-        //commandReceiver.registerOrAuth(login, password, "auth");
+        CommandReceiver commandReceiver = new CommandReceiver(commandInvoker, sender, session.getSocketChannel(), delay, elementCreator, "login", "password"); // Ресивер-пустышка
+        LoginPassReader loginPassReader = new LoginPassReader(commandReceiver);
+        String[] data = loginPassReader.tryAuthOrRegistration();
+        login = data[0];
+        password = HashEncrypter.encryptString(data[1]);
+        commandReceiver = new CommandReceiver(commandInvoker, sender, session.getSocketChannel(), delay, elementCreator, login, password);
 
         commandInvoker.register("help", new Help(commandReceiver));
         commandInvoker.register("add", new Add(commandReceiver));

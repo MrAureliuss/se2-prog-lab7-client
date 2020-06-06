@@ -14,7 +14,7 @@ public class StudyGroup implements Comparable<StudyGroup>, Serializable {
     private Integer studentsCount; //Значение поля должно быть больше 0, Поле не может быть null
     private FormOfEducation formOfEducation; //Поле может быть null
     private Semester semesterEnum; //Поле не может быть null
-    private Person groupAdmin; //Поле может быть null
+    private Person groupAdmin; //Поле не может быть null
 
     public StudyGroup(String name, Coordinates coordinates, Integer studentsCount, FormOfEducation formOfEducation, Semester semesterEnum, Person groupAdmin) {
         this.id = IDGenerator.getIdGenerator().generateID();

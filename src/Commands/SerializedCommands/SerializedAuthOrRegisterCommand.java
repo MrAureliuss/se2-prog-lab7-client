@@ -9,14 +9,9 @@ import java.io.Serializable;
 public class SerializedAuthOrRegisterCommand extends SerializedCommand implements Serializable {
     private String login;
     private String password;
-    private String type;
 
-    public SerializedAuthOrRegisterCommand(Command command, String login, String password, String type) {
+    public SerializedAuthOrRegisterCommand(Command command, String login, String password) {
         super(command, login, HashEncrypter.encryptString(password));
-        this.type = type;
     }
 
-    public String getType() {
-        return type;
-    }
 }

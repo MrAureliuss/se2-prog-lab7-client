@@ -20,12 +20,12 @@ public class Register extends Command {
 
     @Override
     protected void execute(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
-        if (args.length == 3) { commandReceiver.registerOrAuth(args[1], args[2], "register"); }
+        if (args.length == 3) { commandReceiver.register(args[1], args[2]); }
         else { System.out.println("Некорректное количество аргументов. Для справки напишите help."); }
     }
 
     @Override
     protected void writeInfo() {
-        System.out.println("Команда register. Синтаксис: register login password – зарегистрировать клиента.");
+        System.out.println("");
     }
 }

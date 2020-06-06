@@ -93,7 +93,7 @@ public class CommandReceiver {
     }
 
     public void head() throws IOException, InterruptedException, ClassNotFoundException {
-       sender.sendObject(new SerializedCommand(new Head(), login, password));
+        sender.sendObject(new SerializedCommand(new Head(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
@@ -128,8 +128,8 @@ public class CommandReceiver {
         Receiver.receive(socketChannel);
     }
 
-    public void registerOrAuth(String login, String password, String type) throws IOException, InterruptedException, ClassNotFoundException {
-        sender.sendObject(new SerializedAuthOrRegisterCommand(new Register(), login, password, type));
+    public void register(String login, String password) throws IOException, InterruptedException, ClassNotFoundException {
+        sender.sendObject(new SerializedAuthOrRegisterCommand(new Register(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }

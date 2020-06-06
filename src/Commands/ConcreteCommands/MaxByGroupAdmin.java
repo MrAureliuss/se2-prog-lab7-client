@@ -10,7 +10,7 @@ import java.io.IOException;
  */
 public class MaxByGroupAdmin extends Command {
     private static final long serialVersionUID = 32L;
-   transient private CommandReceiver commandReceiver;
+    transient private CommandReceiver commandReceiver;
 
     public MaxByGroupAdmin(CommandReceiver commandReceiver) {
         this.commandReceiver = commandReceiver;
