@@ -15,10 +15,11 @@ import java.util.Scanner;
  * Класс управления и регистрацией консолью.
  */
 class ConsoleManager {
-    void startInteractiveMode(String hostName, String port, String delayArg, String login, String password) throws IOException, ClassNotFoundException, InterruptedException {
+    void startInteractiveMode(String hostName, String port, String delayArg) throws IOException, ClassNotFoundException, InterruptedException {
         Session session = null;
         int delay = 0;
-
+        String login;
+        String password;
         try {
             session = new Session(hostName, Integer.parseInt(port));
             session.startSession();
