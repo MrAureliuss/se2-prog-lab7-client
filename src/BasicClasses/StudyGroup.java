@@ -1,6 +1,5 @@
 package BasicClasses;
 
-import Utils.IDGenerator;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
@@ -17,7 +16,7 @@ public class StudyGroup implements Comparable<StudyGroup>, Serializable {
     private Person groupAdmin; //Поле не может быть null
 
     public StudyGroup(String name, Coordinates coordinates, Integer studentsCount, FormOfEducation formOfEducation, Semester semesterEnum, Person groupAdmin) {
-        this.id = IDGenerator.getIdGenerator().generateID();
+        this.id = 0;
         this.name = name;
         this.coordinates = coordinates;
         this.creationDate = java.time.ZonedDateTime.now();
