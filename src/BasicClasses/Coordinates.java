@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 public class Coordinates implements Serializable {
     private Integer x; //Поле не может быть null, Максимальное значение поля: 531
-    private float y; //Поле не может быть null,Значение поля должно быть больше -653
+    private float y; //Поле не может быть null, Значение поля должно быть больше -653
 
     public Coordinates(Integer x, float y) {
         this.x = x;
