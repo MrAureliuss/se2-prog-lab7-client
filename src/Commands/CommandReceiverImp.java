@@ -3,12 +3,16 @@ package Commands;
 import BasicClasses.Person;
 import BasicClasses.StudyGroup;
 import Client.Receiver;
-import Client.Sender;
 import Commands.ConcreteCommands.*;
 import Commands.SerializedCommands.SerializedArgumentCommand;
 import Commands.SerializedCommands.SerializedCombinedCommand;
 import Commands.SerializedCommands.SerializedObjectCommand;
-import Commands.Utils.Creaters.ElementCreator;
+import Interfaces.CommandInvoker;
+import Interfaces.ElementCreator;
+import Interfaces.Sender;
+import Interfaces.Session;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 
 import java.io.*;
 import java.nio.channels.SocketChannel;
@@ -17,22 +21,25 @@ import java.util.ArrayList;
 /**
  * Ресивер(получатель), отправляет серилизованные объекты на сервер.
  */
+@Singleton
 public class CommandReceiver {
     private final CommandInvoker commandInvoker;
     private final Sender sender;
     private final SocketChannel socketChannel;
-    private final Integer delay;
+    private final Integer delay = 500;
     private final ElementCreator elementCreator;
-    private final String login;
-    private final String password;
+    private String login;
+    private String password;
 
-    public CommandReceiver(CommandInvoker commandInvoker, Sender sender, SocketChannel socketChannel,
-                           Integer delay, ElementCreator elementCreator, String login, String password) {
+    @Inject
+    public CommandReceiver(CommandInvoker commandInvoker, Session session, Sender sender, ElementCreator elementCreator) {
         this.commandInvoker = commandInvoker;
+        socketChannel = session.getSocketChannel();
         this.sender = sender;
-        this.socketChannel = socketChannel;
-        this.delay = delay;
         this.elementCreator = elementCreator;
+    }
+
+    public void setAuthorizationData(String login, String password){
         this.login = login;
         this.password = password;
     }
@@ -42,18 +49,30 @@ public class CommandReceiver {
     }
 
     public void info() throws IOException, ClassNotFoundException, InterruptedException {
+        if (login.equals("") || password.equals("")) {
+            System.out.println("Вы не авторизированы");
+            return;
+        }
         sender.sendObject(new SerializedCommand(new Info(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
 
     public void show() throws IOException, ClassNotFoundException, InterruptedException {
+        if (login.equals("") || password.equals("")) {
+            System.out.println("Вы не авторизированы");
+            return;
+        }
         sender.sendObject(new SerializedCommand(new Show(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
 
     public void add() throws IOException, InterruptedException, ClassNotFoundException {
+        if (login.equals("") || password.equals("")) {
+            System.out.println("Вы не авторизированы");
+            return;
+        }
         sender.sendObject(new SerializedObjectCommand(new Add(), elementCreator.createStudyGroup(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
@@ -64,6 +83,10 @@ public class CommandReceiver {
      * @param ID - апдейт элемента по ID.
      */
     public void update(String ID) throws IOException, InterruptedException, ClassNotFoundException {
+        if (login.equals("") || password.equals("")) {
+            System.out.println("Вы не авторизированы");
+            return;
+        }
         sender.sendObject(new SerializedCombinedCommand(new Update(), elementCreator.createStudyGroup(), ID, login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
@@ -74,12 +97,20 @@ public class CommandReceiver {
      * @param ID - удаление по ID.
      */
     public void removeById(String ID) throws IOException, InterruptedException, ClassNotFoundException {
+        if (login.equals("") || password.equals("")) {
+            System.out.println("Вы не авторизированы");
+            return;
+        }
         sender.sendObject(new SerializedArgumentCommand(new RemoveByID(), ID, login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
 
     public void clear() throws IOException, InterruptedException, ClassNotFoundException {
+        if (login.equals("") || password.equals("")) {
+            System.out.println("Вы не авторизированы");
+            return;
+        }
         sender.sendObject(new SerializedCommand(new Clear(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
@@ -92,36 +123,60 @@ public class CommandReceiver {
     }
 
     public void head() throws IOException, InterruptedException, ClassNotFoundException {
+        if (login.equals("") || password.equals("")) {
+            System.out.println("Вы не авторизированы");
+            return;
+        }
         sender.sendObject(new SerializedCommand(new Head(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
 
     public void removeGreater() throws IOException, InterruptedException, ClassNotFoundException {
+        if (login.equals("") || password.equals("")) {
+            System.out.println("Вы не авторизированы");
+            return;
+        }
         sender.sendObject(new SerializedObjectCommand(new RemoveGreater(), elementCreator.createStudyGroup(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
 
     public void removeLower() throws IOException, ClassNotFoundException, InterruptedException {
+        if (login.equals("") || password.equals("")) {
+            System.out.println("Вы не авторизированы");
+            return;
+        }
         sender.sendObject(new SerializedObjectCommand(new RemoveLower(), elementCreator.createStudyGroup(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
 
     public void minBySemesterEnum() throws IOException, InterruptedException, ClassNotFoundException {
+        if (login.equals("") || password.equals("")) {
+            System.out.println("Вы не авторизированы");
+            return;
+        }
         sender.sendObject(new SerializedCommand(new MinBySemesterEnum(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
 
     public void maxByGroupAdmin() throws IOException, InterruptedException, ClassNotFoundException {
+        if (login.equals("") || password.equals("")) {
+            System.out.println("Вы не авторизированы");
+            return;
+        }
         sender.sendObject(new SerializedCommand(new MaxByGroupAdmin(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
 
     public void countByGroupAdmin() throws IOException, InterruptedException, ClassNotFoundException {
+        if (login.equals("") || password.equals("")) {
+            System.out.println("Вы не авторизированы");
+            return;
+        }
         sender.sendObject(new SerializedObjectCommand(new CountByGroupAdmin(), elementCreator.createPerson(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
@@ -134,6 +189,10 @@ public class CommandReceiver {
     }
 
     public void executeScript(String path) {
+        if (login.equals("") || password.equals("")) {
+            System.out.println("Вы не авторизированы");
+            return;
+        }
         String line;
         String command;
         ArrayList<String> parameters = new ArrayList<>();

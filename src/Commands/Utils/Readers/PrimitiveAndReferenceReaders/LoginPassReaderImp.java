@@ -5,6 +5,7 @@ import Commands.Utils.HashEncrypter;
 import java.io.Console;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashSet;
 
 public class LoginPassReader {
     private CommandReceiver commandReceiver;
@@ -14,8 +15,8 @@ public class LoginPassReader {
     }
 
     public String[] tryAuthOrRegistration() throws InterruptedException, IOException, ClassNotFoundException {
-        String login = "";
-        String password = "";
+        String login = "111";
+        String password = HashEncrypter.encryptString( "111");
 
         Console console = System.console();
 
