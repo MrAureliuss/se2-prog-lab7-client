@@ -1,7 +1,8 @@
 package Commands.ConcreteCommands;
 
 import Commands.Command;
-import Commands.CommandReceiver;
+import Interfaces.CommandReceiver;
+import com.google.inject.Inject;
 
 import java.io.IOException;
 
@@ -10,13 +11,12 @@ import java.io.IOException;
  */
 public class MaxByGroupAdmin extends Command {
     private static final long serialVersionUID = 32L;
-    transient private CommandReceiver commandReceiver;
+    transient private final CommandReceiver commandReceiver;
 
+    @Inject
     public MaxByGroupAdmin(CommandReceiver commandReceiver) {
         this.commandReceiver = commandReceiver;
     }
-
-    public MaxByGroupAdmin() {}
 
     @Override
     protected void execute(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
@@ -27,7 +27,7 @@ public class MaxByGroupAdmin extends Command {
     }
 
     @Override
-    protected void writeInfo() {
-        System.out.println("Команда max_by_group_admin – вывести любой объект из коллекции, значение поля groupAdmin которого является максимальным.");
+    protected String writeInfo() {
+        return "Команда max_by_group_admin – вывести любой объект из коллекции, значение поля groupAdmin которого является максимальным.";
     }
 }

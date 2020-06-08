@@ -1,14 +1,8 @@
 package Commands.Utils.Creaters;
 
 import BasicClasses.*;
-import Commands.Utils.Readers.EnumReaders.ColorReader;
-import Commands.Utils.Readers.EnumReaders.CountryReader;
-import Commands.Utils.Readers.EnumReaders.FormOfEducationReader;
-import Commands.Utils.Readers.EnumReaders.SemesterReader;
-import Commands.Utils.Readers.PrimitiveAndReferenceReaders.PrimitiveFloatReader;
-import Commands.Utils.Readers.PrimitiveAndReferenceReaders.PrimitiveIntReader;
-import Commands.Utils.Readers.PrimitiveAndReferenceReaders.RefIntReader;
-import Commands.Utils.Readers.PrimitiveAndReferenceReaders.StringReader;
+import Interfaces.*;
+import com.google.inject.Inject;
 
 import java.util.ArrayList;
 
@@ -16,29 +10,54 @@ import java.util.ArrayList;
 /**
  * Классб содержащий методы для создания группы и человека.
  */
-public class ElementCreator {
+public class ElementCreatorImp implements ElementCreator {
+    private final StringReader stringReader;
+    private final RefIntReader refIntReader;
+    private final PrimitiveIntReader primitiveIntReader;
+    private final PrimitiveFloatReader primitiveFloatReader;
+    private final FormOfEducationReader formOfEducationReader;
+    private final ColorReader colorReader;
+    private final CountryReader countryReader;
+    private final SemesterReader semesterReader;
 
+    @Inject
+    public ElementCreatorImp(StringReader stringReader, RefIntReader refIntReader, PrimitiveIntReader primitiveIntReader
+            , PrimitiveFloatReader primitiveFloatReader, FormOfEducationReader formOfEducationReader, ColorReader colorReader,
+                             CountryReader countryReader, SemesterReader semesterReader) {
+        this.stringReader = stringReader;
+        this.refIntReader = refIntReader;
+        this.primitiveIntReader = primitiveIntReader;
+        this.primitiveFloatReader = primitiveFloatReader;
+        this.formOfEducationReader = formOfEducationReader;
+        this.colorReader = colorReader;
+        this.countryReader = countryReader;
+        this.semesterReader = semesterReader;
+    }
+
+    @Override
     public StudyGroup createStudyGroup() {
-        String name = StringReader.read("Введите имя группы: ", false);
-        Integer x = RefIntReader.read("Введите X: ", false, 531, "MAX");
-        float y = PrimitiveFloatReader.read("Введите Y: ", -653f, "MIN");
-        Integer studentsCount = RefIntReader.read("Введите количество студентов: ", false, 0, "MIN");
-        FormOfEducation formOfEducation = FormOfEducationReader.read(true);
-        Semester semester = SemesterReader.read(false);
+        String name = stringReader.read("Введите имя группы: ", false);
+        Integer x = refIntReader.read("Введите X: ", false, 531, "MAX");
+        float y = primitiveFloatReader.read("Введите Y: ", -653f, "MIN");
+        Integer studentsCount = refIntReader.read("Введите количество студентов: ", false, 0, "MIN");
+        FormOfEducation formOfEducation = formOfEducationReader.read(true);
+        Semester semester = semesterReader.read(false);
 
         return new StudyGroup(name, new Coordinates(x, y), studentsCount, formOfEducation, semester, createPerson());
     }
 
+    @Override
     public Person createPerson() {
-        String groupAdminName = StringReader.read("Введите имя админа группы: ", false);
-        int height = PrimitiveIntReader.read("Введите рост админа группы: ", 0, "MIN");
-        Color eyeColor = ColorReader.read("Введите цвет глаз Админа группы.", false);
-        Color hairColor = ColorReader.read("Введите цвет волос Админа группы", false);
-        Country nationality = CountryReader.read("Введите национальность Админа группы", false);
+        String groupAdminName = stringReader.read("Введите имя админа группы: ", false);
+        int height = primitiveIntReader.read("Введите рост админа группы: ", 0, "MIN");
+        Color eyeColor = colorReader.read("Введите цвет глаз Админа группы.", false);
+        Color hairColor = colorReader.read("Введите цвет волос Админа группы", false);
+        Country nationality = countryReader.read("Введите национальность Админа группы", false);
 
         return new Person(groupAdminName, height, eyeColor, hairColor, nationality);
     }
 
+    @Override
     public StudyGroup createScriptStudyGroup(ArrayList<String> parameters) {
         if (validateArrayStudyGroup(parameters)) {
             FormOfEducation formOfEducation = null;
@@ -55,6 +74,7 @@ public class ElementCreator {
         return null;
     }
 
+    @Override
     public Person createScriptPerson(ArrayList<String> parameters) {
         if (validateArrayPerson(parameters)) {
             return new Person(parameters.get(0), Integer.parseInt(parameters.get(1)), Color.valueOf(parameters.get(2).toUpperCase()),
@@ -70,13 +90,13 @@ public class ElementCreator {
                     && Integer.parseInt(parameters.get(1)) <= 531
                     && Float.parseFloat(parameters.get(2)) > -653f
                     && Integer.parseInt(parameters.get(3)) > 0
-                    && (FormOfEducationReader.checkExist(parameters.get(4)) || parameters.get(4).isEmpty())
+                    && (formOfEducationReader.checkExist(parameters.get(4)) || parameters.get(4).isEmpty())
                     && !parameters.get(5).isEmpty()
                     && !parameters.get(6).isEmpty()
                     && Integer.parseInt(parameters.get(7)) > 0
-                    && ColorReader.checkExist(parameters.get(8))
-                    && ColorReader.checkExist(parameters.get(9))
-                    && CountryReader.checkExist(parameters.get(10));
+                    && colorReader.checkExist(parameters.get(8))
+                    && colorReader.checkExist(parameters.get(9))
+                    && countryReader.checkExist(parameters.get(10));
 
         } catch (NumberFormatException ex) { return false; }
     }
@@ -85,9 +105,9 @@ public class ElementCreator {
         try {
             return (!parameters.get(0).isEmpty() && parameters.get(0) != null) &&
                     Integer.parseInt(parameters.get(1)) > 0 &&
-                    ColorReader.checkExist(parameters.get(2)) &&
-                    ColorReader.checkExist(parameters.get(3)) &&
-                    CountryReader.checkExist(parameters.get(4));
+                    colorReader.checkExist(parameters.get(2)) &&
+                    colorReader.checkExist(parameters.get(3)) &&
+                    countryReader.checkExist(parameters.get(4));
 
         } catch (NumberFormatException ex) { return false; }
     }

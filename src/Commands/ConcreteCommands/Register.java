@@ -1,7 +1,8 @@
 package Commands.ConcreteCommands;
 
 import Commands.Command;
-import Commands.CommandReceiver;
+import Interfaces.CommandReceiver;
+import com.google.inject.Inject;
 
 import java.io.IOException;
 
@@ -10,13 +11,12 @@ import java.io.IOException;
  */
 public class Register extends Command {
     private static final long serialVersionUID = 32L;
-    transient private CommandReceiver commandReceiver;
+    transient private final CommandReceiver commandReceiver;
 
+    @Inject
     public Register (CommandReceiver commandReceiver) {
         this.commandReceiver = commandReceiver;
     }
-
-    public Register() {}
 
     @Override
     protected void execute(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
@@ -25,7 +25,7 @@ public class Register extends Command {
     }
 
     @Override
-    protected void writeInfo() {
-        System.out.println("");
+    protected String writeInfo() {
+        return "";
     }
 }

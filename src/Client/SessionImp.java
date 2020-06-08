@@ -1,21 +1,51 @@
 package Client;
 
+import Interfaces.Session;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 import java.nio.channels.SocketChannel;
+import java.sql.SQLOutput;
+import java.util.NoSuchElementException;
+import java.util.Scanner;
 
-public class Session {
+@Singleton
+public class SessionImp implements Session {
     private SocketChannel socketChannel;
     private String hostName;
     private int port;
 
-    public Session(String hostName, int port) {
-        this.hostName = hostName;
-        this.port = port;
-    }
+    @Inject
+    public SessionImp() {
+        FileReader fileReader= null;
+        try {
+            fileReader = new FileReader(System.getProperty("user.dir") + "/config.txt");
+            Scanner scan = new Scanner(fileReader);
+            String[] data = scan.nextLine().split(" ");
+            hostName = data[0];
+            port = Integer.parseInt(data[1]);
+            fileReader.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Не найден файл config.txt, создайте его в директории " +
+                    System.getProperty("user.dir") +" и напишите туда хост и порт через пробел");
+            System.exit(0);
+        } catch (IOException e) {
+            System.out.println("Ошибка при чтении из конфигурационного файла: " + e);
+            System.exit(0);
+        } catch (NumberFormatException ex) {
+            System.out.println("порт должен быть целым числом");
+            System.exit(0);
+        } catch (NoSuchElementException e){
+            System.out.println("Напишите в файл config.txt хост и порт через пробел");
+            System.exit(0);
+        }
 
-    public void startSession() throws IOException, InterruptedException {
+
         for (int i = 0; true; i++){
             try {
                 InetSocketAddress inetSocketAddress = new InetSocketAddress(hostName, port);
@@ -28,15 +58,23 @@ public class Session {
                 System.out.println("Не удалось подключиться к удаленному адресу...");
                 if (i == 2) System.exit(0);
                 System.out.println("Попробую снова");
-                Thread.sleep(2000);
+                try {
+                    Thread.sleep(2000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         }
     }
 
+    @Override
     public void closeSession() throws IOException {
         if (socketChannel != null) { socketChannel.close(); }
     }
 
+    @Override
     public SocketChannel getSocketChannel() {
         return socketChannel;
     }

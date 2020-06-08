@@ -1,18 +1,22 @@
 package Commands.Utils.Readers.EnumReaders;
 
 import BasicClasses.FormOfEducation;
+import Interfaces.FormOfEducationReader;
+
 import java.util.Arrays;
 import java.util.Scanner;
 
 /**
  * Считыватель формы обучения.
  */
-public class FormOfEducationReader {
-    public static boolean checkExist(String toContains) {
+public class FormOfEducationReaderImp implements FormOfEducationReader {
+    @Override
+    public boolean checkExist(String toContains) {
         return Arrays.stream(FormOfEducation.values()).anyMatch((formOfEducation) -> formOfEducation.name().equals(toContains.toUpperCase()));
     }
 
-    public static FormOfEducation read(boolean canBeNull) {
+    @Override
+    public FormOfEducation read(boolean canBeNull) {
         Scanner in = new Scanner(System.in);
         System.out.print("Введите страну из представленных(" + Arrays.asList(FormOfEducation.values()) + "): ");
         String toContains = in.nextLine().trim().toUpperCase();

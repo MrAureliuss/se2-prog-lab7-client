@@ -1,7 +1,8 @@
 package Commands.ConcreteCommands;
 
 import Commands.Command;
-import Commands.CommandReceiver;
+import Interfaces.CommandReceiver;
+import com.google.inject.Inject;
 
 import java.io.IOException;
 
@@ -10,13 +11,12 @@ import java.io.IOException;
  */
 public class RemoveGreater extends Command {
     private static final long serialVersionUID = 32L;
-    transient private CommandReceiver commandReceiver;
+    transient private final CommandReceiver commandReceiver;
 
+    @Inject
     public RemoveGreater (CommandReceiver commandReceiver) {
         this.commandReceiver = commandReceiver;
     }
-
-    public RemoveGreater() {}
 
     @Override
     protected void execute(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
@@ -27,7 +27,7 @@ public class RemoveGreater extends Command {
     }
 
     @Override
-    protected void writeInfo() {
-        System.out.println("Команда remove_greater – удалить из коллекции все элементы, превышающие заданный.");
+    protected String writeInfo() {
+        return "Команда remove_greater – удалить из коллекции все элементы, превышающие заданный.";
     }
 }

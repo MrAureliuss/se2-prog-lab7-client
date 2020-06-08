@@ -1,18 +1,22 @@
 package Commands.Utils.Readers.EnumReaders;
 
 import BasicClasses.Country;
+import Interfaces.CountryReader;
+
 import java.util.Arrays;
 import java.util.Scanner;
 
 /**
  * Считыватель страны.
  */
-public class CountryReader {
-    public static boolean checkExist(String toContains) {
+public class CountryReaderImp implements CountryReader {
+    @Override
+    public boolean checkExist(String toContains) {
         return Arrays.stream(Country.values()).anyMatch((country) -> country.name().equals(toContains.toUpperCase()));
     }
 
-    public static Country read(String messageForConsole, boolean canBeNull) {
+    @Override
+    public Country read(String messageForConsole, boolean canBeNull) {
         Scanner in = new Scanner(System.in);
         System.out.print(messageForConsole + " Выберите страну из представленных(" + Arrays.asList(Country.values()) + "): ");
         String toContains = in.nextLine().trim().toUpperCase();

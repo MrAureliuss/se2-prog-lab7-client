@@ -1,7 +1,8 @@
 package Commands.ConcreteCommands;
 
 import Commands.Command;
-import Commands.CommandReceiver;
+import Interfaces.CommandReceiver;
+import com.google.inject.Inject;
 
 import java.io.IOException;
 
@@ -10,13 +11,12 @@ import java.io.IOException;
  */
 public class Add extends Command {
     private static final long serialVersionUID = 32L;
-    transient private CommandReceiver commandReceiver;
+    transient private final CommandReceiver commandReceiver;
 
+    @Inject
     public Add (CommandReceiver commandReceiver) {
         this.commandReceiver = commandReceiver;
     }
-
-    public Add() {}
 
     @Override
     protected void execute(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
@@ -27,7 +27,7 @@ public class Add extends Command {
     }
 
     @Override
-    protected void writeInfo() {
-        System.out.println("Команда add – добавить новый элемент в коллекцию.");
+    protected String writeInfo() {
+        return "Команда add – добавить новый элемент в коллекцию.";
     }
 }

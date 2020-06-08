@@ -1,7 +1,8 @@
 package Commands.ConcreteCommands;
 
 import Commands.Command;
-import Commands.CommandReceiver;
+import Interfaces.CommandReceiver;
+import com.google.inject.Inject;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -11,10 +12,9 @@ import java.io.Serializable;
  */
 public class Info extends Command implements Serializable {
     private static final long serialVersionUID = 32L;
-    transient private CommandReceiver commandReceiver;
+    transient private final CommandReceiver commandReceiver;
 
-    public Info() {}
-
+    @Inject
     public Info (CommandReceiver commandReceiver) {
         this.commandReceiver = commandReceiver;
     }
@@ -28,7 +28,7 @@ public class Info extends Command implements Serializable {
     }
 
     @Override
-    protected void writeInfo() {
-        System.out.println("Команда info – вывести в стандартный поток вывода информацию о коллекции.");
+    protected String writeInfo() {
+        return "Команда info – вывести в стандартный поток вывода информацию о коллекции.";
     }
 }

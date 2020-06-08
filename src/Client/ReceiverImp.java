@@ -1,11 +1,25 @@
 package Client;
 
+import Interfaces.Decrypting;
+import Interfaces.Receiver;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-public class Receiver {
-    public static void receive(SocketChannel socketChannel) throws IOException, ClassNotFoundException {
+@Singleton
+public class ReceiverImp implements Receiver {
+    private final Decrypting decrypting;
+
+    @Inject
+    public ReceiverImp(Decrypting decrypting) {
+        this.decrypting = decrypting;
+    }
+
+    @Override
+    public void receive(SocketChannel socketChannel) throws IOException, ClassNotFoundException {
         ByteBuffer byteBuffer = ByteBuffer.allocate(1024*1024);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 
@@ -20,7 +34,7 @@ public class Receiver {
         if(i!=0) {
             ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(byteArrayOutputStream.toByteArray());
             ObjectInputStream objectInputStream = new ObjectInputStream(byteArrayInputStream);
-            Decrypting.decrypt(objectInputStream.readObject());
+            decrypting.decrypt(objectInputStream.readObject());
         }
 
     }

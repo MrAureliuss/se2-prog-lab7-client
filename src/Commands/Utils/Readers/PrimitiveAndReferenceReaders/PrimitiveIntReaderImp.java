@@ -1,12 +1,15 @@
 package Commands.Utils.Readers.PrimitiveAndReferenceReaders;
 
+import Interfaces.PrimitiveIntReader;
+
 import java.util.Scanner;
 
 /**
  * Считыватель примитивного int.
  */
-public class PrimitiveIntReader {
-    public static int read(String messageForConsole, int limit, String type) {
+public class PrimitiveIntReaderImp implements PrimitiveIntReader {
+    @Override
+    public int read(String messageForConsole, int limit, String type) {
         System.out.print(messageForConsole);
         Scanner sc = new Scanner(System.in);
         int result = 0;

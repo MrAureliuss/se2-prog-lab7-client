@@ -1,11 +1,14 @@
 package Commands.Utils;
 
+import Interfaces.HashEncrypter;
+
 import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-public class HashEncrypter {
-    public static String encryptString (String input)
+public class HashEncrypterImp implements HashEncrypter {
+    @Override
+    public String encryptString (String input)
     {
         try {
             MessageDigest md = MessageDigest.getInstance("SHA-224");

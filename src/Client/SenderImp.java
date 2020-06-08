@@ -1,18 +1,26 @@
 package Client;
 
+import Interfaces.Sender;
+import Interfaces.Session;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 
-public class Sender {
+@Singleton
+public class SenderImp implements Sender {
     private final SocketChannel socketChannel;
 
-    public Sender(Session session) {
+    @Inject
+    public SenderImp(Session session) {
         this.socketChannel = session.getSocketChannel();
     }
 
+    @Override
     public void sendObject(Object serializedObject) throws IOException {
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(bos);

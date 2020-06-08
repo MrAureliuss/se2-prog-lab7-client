@@ -1,18 +1,22 @@
 package Commands.Utils.Readers.EnumReaders;
 
 import BasicClasses.Color;
+import Interfaces.ColorReader;
+
 import java.util.Arrays;
 import java.util.Scanner;
 
 /**
  * Считыватель цвета.
  */
-public class ColorReader {
-    public static boolean checkExist(String toContains) {
+public class ColorReaderImp implements ColorReader {
+    @Override
+    public boolean checkExist(String toContains) {
         return Arrays.stream(Color.values()).anyMatch((color) -> color.name().equals(toContains.toUpperCase()));
     }
 
-    public static Color read(String messageForConsole, boolean canBeNull) {
+    @Override
+    public Color read(String messageForConsole, boolean canBeNull) {
         Scanner in = new Scanner(System.in);
         System.out.print(messageForConsole + " Выберите цвет из представленных(" + Arrays.asList(Color.values()) + "): ");
         String toContains = in.nextLine().trim().toUpperCase();

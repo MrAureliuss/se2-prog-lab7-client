@@ -1,12 +1,15 @@
 package Commands.Utils.Readers.PrimitiveAndReferenceReaders;
 
+import Interfaces.RefIntReader;
+
 import java.util.Scanner;
 
 /**
  * Считыватель класса-оболочки int.
  */
-public class RefIntReader {
-    public static Integer read(String messageForConsole, boolean canBeNull, int limit, String type) {
+public class RefIntReaderImp implements RefIntReader {
+    @Override
+    public Integer read(String messageForConsole, boolean canBeNull, int limit, String type) {
         System.out.print(messageForConsole);
         Scanner sc = new Scanner(System.in);
         int result = 0;

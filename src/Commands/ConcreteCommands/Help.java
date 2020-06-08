@@ -1,7 +1,8 @@
 package Commands.ConcreteCommands;
 
 import Commands.Command;
-import Commands.CommandReceiver;
+import Interfaces.CommandReceiver;
+import com.google.inject.Inject;
 
 import java.io.IOException;
 
@@ -9,13 +10,12 @@ import java.io.IOException;
  * Конкретная команда помощи.
  */
 public class Help extends Command {
-    private CommandReceiver commandReceiver;
+    private final CommandReceiver commandReceiver;
 
+    @Inject
     public Help (CommandReceiver commandReceiver) {
         this.commandReceiver = commandReceiver;
     }
-
-    public Help() {}
 
     @Override
     protected void execute(String[] args) throws IOException {
@@ -26,7 +26,7 @@ public class Help extends Command {
     }
 
     @Override
-    protected void writeInfo() {
-        System.out.println("Команда help – получить справку по доступным командам.");
+    protected String writeInfo() {
+        return "Команда help – получить справку по доступным командам.";
     }
 }

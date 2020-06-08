@@ -1,7 +1,8 @@
 package Commands.ConcreteCommands;
 
 import Commands.Command;
-import Commands.CommandReceiver;
+import Interfaces.CommandReceiver;
+import com.google.inject.Inject;
 
 import java.io.IOException;
 
@@ -9,13 +10,12 @@ import java.io.IOException;
  * Конкретная команда выхода.
  */
 public class Exit extends Command {
-    private CommandReceiver commandReceiver;
+    private final CommandReceiver commandReceiver;
 
+    @Inject
     public Exit (CommandReceiver commandReceiver) {
         this.commandReceiver = commandReceiver;
     }
-
-    public Exit() {}
 
     @Override
     protected void execute(String[] args) throws IOException {
@@ -26,7 +26,7 @@ public class Exit extends Command {
     }
 
     @Override
-    protected void writeInfo() {
-        System.out.println("Команда exit – завершить программу (без сохранения в файл).");
+    protected String writeInfo() {
+        return "Команда exit – завершить программу (без сохранения в файл).";
     }
 }

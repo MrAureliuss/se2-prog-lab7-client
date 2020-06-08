@@ -1,12 +1,15 @@
 package Commands.Utils.Readers.PrimitiveAndReferenceReaders;
 
+import Interfaces.PrimitiveFloatReader;
+
 import java.util.Scanner;
 
 /**
  * Считыватель примитивного float.
  */
-public class PrimitiveFloatReader {
-    public static float read(String messageForConsole, float limit, String type) {
+public class PrimitiveFloatReaderImp implements PrimitiveFloatReader {
+    @Override
+    public float read(String messageForConsole, float limit, String type) {
         System.out.print(messageForConsole);
         Scanner sc = new Scanner(System.in);
         float result = 0f;
