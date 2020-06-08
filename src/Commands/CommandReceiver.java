@@ -8,7 +8,6 @@ import Commands.ConcreteCommands.*;
 import Commands.SerializedCommands.SerializedArgumentCommand;
 import Commands.SerializedCommands.SerializedCombinedCommand;
 import Commands.SerializedCommands.SerializedObjectCommand;
-import Commands.SerializedCommands.SerializedAuthOrRegisterCommand;
 import Commands.Utils.Creaters.ElementCreator;
 
 import java.io.*;
@@ -129,7 +128,7 @@ public class CommandReceiver {
     }
 
     public void register(String login, String password) throws IOException, InterruptedException, ClassNotFoundException {
-        sender.sendObject(new SerializedAuthOrRegisterCommand(new Register(), login, password));
+        sender.sendObject(new SerializedCommand(new Register(), login, password));
         Thread.sleep(delay);
         Receiver.receive(socketChannel);
     }
