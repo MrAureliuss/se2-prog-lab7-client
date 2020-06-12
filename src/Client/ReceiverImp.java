@@ -12,7 +12,6 @@ import java.nio.channels.SocketChannel;
 @Singleton
 public class ReceiverImp implements Receiver {
     private final Decrypting decrypting;
-    private final Integer delay = 500;
 
     @Inject
     public ReceiverImp(Decrypting decrypting) {
@@ -20,8 +19,7 @@ public class ReceiverImp implements Receiver {
     }
 
     @Override
-    public void receive(SocketChannel socketChannel) throws IOException, ClassNotFoundException, InterruptedException {
-        Thread.sleep(delay);
+    public void receive(SocketChannel socketChannel) throws IOException, ClassNotFoundException {
         ByteBuffer byteBuffer = ByteBuffer.allocate(1024*1024);
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 

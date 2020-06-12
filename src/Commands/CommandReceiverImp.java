@@ -11,8 +11,12 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import java.io.*;
+import java.net.PortUnreachableException;
+import java.nio.channels.SelectionKey;
+import java.nio.channels.Selector;
 import java.nio.channels.SocketChannel;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  * Ресивер(получатель), отправляет серилизованные объекты на сервер.
@@ -25,18 +29,20 @@ public class CommandReceiverImp implements CommandReceiver {
     private final ElementCreator elementCreator;
     private final Receiver receiver;
     private final Register register;
+    private final Selector selector;
     private String login;
     private String password;
 
     @Inject
     public CommandReceiverImp(CommandInvoker commandInvoker, Session session,
-                              Sender sender, ElementCreator elementCreator, Receiver receiver, Register register) {
+                              Sender sender, ElementCreator elementCreator, Receiver receiver, Register register) throws IOException {
         this.commandInvoker = commandInvoker;
         socketChannel = session.getSocketChannel();
         this.sender = sender;
         this.elementCreator = elementCreator;
         this.receiver = receiver;
         this.register = register;
+        selector = Selector.open();
     }
 
     @Override
@@ -51,70 +57,59 @@ public class CommandReceiverImp implements CommandReceiver {
     }
 
     @Override
-    public void info() throws IOException, ClassNotFoundException, InterruptedException {
+    public void info() throws ClassNotFoundException, InterruptedException {
         if (login.equals("") || password.equals("")) {
             System.out.println("Вы не авторизированы");
             return;
         }
-        sender.sendObject(new SerializedCommand(commandInvoker.getCommandMap().get("info"), login, password));
-
-        receiver.receive(socketChannel);
+        requestHandler(new SerializedCommand(commandInvoker.getCommandMap().get("info"), login, password));
     }
 
     @Override
-    public void show() throws IOException, ClassNotFoundException, InterruptedException {
+    public void show() throws ClassNotFoundException, InterruptedException {
         if (login.equals("") || password.equals("")) {
             System.out.println("Вы не авторизированы");
             return;
         }
-        sender.sendObject(new SerializedCommand(commandInvoker.getCommandMap().get("show"), login, password));
-
-        receiver.receive(socketChannel);
+        requestHandler(new SerializedCommand(commandInvoker.getCommandMap().get("show"), login, password));
     }
 
     @Override
-    public void add() throws IOException, InterruptedException, ClassNotFoundException {
+    public void add() throws InterruptedException, ClassNotFoundException {
         if (login.equals("") || password.equals("")) {
             System.out.println("Вы не авторизированы");
             return;
         }
-        sender.sendObject(new SerializedObjectCommand(commandInvoker.getCommandMap().get("add"), elementCreator.createStudyGroup(), login, password));
-
-        receiver.receive(socketChannel);
+        requestHandler(new SerializedObjectCommand(commandInvoker.getCommandMap().get("add"),
+                elementCreator.createStudyGroup(), login, password));
     }
 
     @Override
-    public void update(String ID) throws IOException, InterruptedException, ClassNotFoundException {
+    public void update(String ID) throws InterruptedException, ClassNotFoundException {
         if (login.equals("") || password.equals("")) {
             System.out.println("Вы не авторизированы");
             return;
         }
-        sender.sendObject(new SerializedCombinedCommand(commandInvoker.getCommandMap().get("update"),
+        requestHandler(new SerializedCombinedCommand(commandInvoker.getCommandMap().get("update"),
                 elementCreator.createStudyGroup(), ID, login, password));
-
-        receiver.receive(socketChannel);
     }
 
     @Override
-    public void removeById(String ID) throws IOException, InterruptedException, ClassNotFoundException {
+    public void removeById(String ID) throws InterruptedException, ClassNotFoundException {
         if (login.equals("") || password.equals("")) {
             System.out.println("Вы не авторизированы");
             return;
         }
-        sender.sendObject(new SerializedArgumentCommand(commandInvoker.getCommandMap().get("remove_by_id"), ID, login, password));
-
-        receiver.receive(socketChannel);
+        requestHandler(new SerializedArgumentCommand(commandInvoker.getCommandMap().get("remove_by_id"), ID, login, password));
     }
 
     @Override
-    public void clear() throws IOException, InterruptedException, ClassNotFoundException {
+    public void clear() throws InterruptedException, ClassNotFoundException {
         if (login.equals("") || password.equals("")) {
             System.out.println("Вы не авторизированы");
             return;
         }
-        sender.sendObject(new SerializedCommand(commandInvoker.getCommandMap().get("clear"), login, password));
-
-        receiver.receive(socketChannel);
+        requestHandler(new SerializedCommand(commandInvoker.getCommandMap().get("clear"), login, password));
     }
 
     @Override
@@ -125,79 +120,65 @@ public class CommandReceiverImp implements CommandReceiver {
     }
 
     @Override
-    public void head() throws IOException, InterruptedException, ClassNotFoundException {
+    public void head() throws InterruptedException, ClassNotFoundException {
         if (login.equals("") || password.equals("")) {
             System.out.println("Вы не авторизированы");
             return;
         }
-        sender.sendObject(new SerializedCommand(commandInvoker.getCommandMap().get("head"), login, password));
-
-        receiver.receive(socketChannel);
+        requestHandler(new SerializedCommand(commandInvoker.getCommandMap().get("head"), login, password));
     }
 
     @Override
-    public void removeGreater() throws IOException, InterruptedException, ClassNotFoundException {
+    public void removeGreater() throws InterruptedException, ClassNotFoundException {
         if (login.equals("") || password.equals("")) {
             System.out.println("Вы не авторизированы");
             return;
         }
-        sender.sendObject(new SerializedObjectCommand(commandInvoker.getCommandMap().get("remove_greater"),
+        requestHandler(new SerializedObjectCommand(commandInvoker.getCommandMap().get("remove_greater"),
                 elementCreator.createStudyGroup(), login, password));
-
-        receiver.receive(socketChannel);
     }
 
     @Override
-    public void removeLower() throws IOException, ClassNotFoundException, InterruptedException {
+    public void removeLower() throws ClassNotFoundException, InterruptedException {
         if (login.equals("") || password.equals("")) {
             System.out.println("Вы не авторизированы");
             return;
         }
-        sender.sendObject(new SerializedObjectCommand(commandInvoker.getCommandMap().get("remove_lower"),
+        requestHandler(new SerializedObjectCommand(commandInvoker.getCommandMap().get("remove_lower"),
                 elementCreator.createStudyGroup(), login, password));
-
-        receiver.receive(socketChannel);
     }
 
     @Override
-    public void minBySemesterEnum() throws IOException, InterruptedException, ClassNotFoundException {
+    public void minBySemesterEnum() throws InterruptedException, ClassNotFoundException {
         if (login.equals("") || password.equals("")) {
             System.out.println("Вы не авторизированы");
             return;
         }
-        sender.sendObject(new SerializedCommand(commandInvoker.getCommandMap().get("min_by_semester_enum"), login, password));
-
-        receiver.receive(socketChannel);
+        requestHandler(new SerializedCommand(commandInvoker.getCommandMap().get("min_by_semester_enum"), login, password));
     }
 
     @Override
-    public void maxByGroupAdmin() throws IOException, InterruptedException, ClassNotFoundException {
+    public void maxByGroupAdmin() throws InterruptedException, ClassNotFoundException {
         if (login.equals("") || password.equals("")) {
             System.out.println("Вы не авторизированы");
             return;
         }
-        sender.sendObject(new SerializedCommand(commandInvoker.getCommandMap().get("max_by_group_admin"), login, password));
-
-        receiver.receive(socketChannel);
+        requestHandler(new SerializedCommand(commandInvoker.getCommandMap().get("max_by_group_admin"), login, password));
     }
 
     @Override
-    public void countByGroupAdmin() throws IOException, InterruptedException, ClassNotFoundException {
+    public void countByGroupAdmin() throws InterruptedException, ClassNotFoundException {
         if (login.equals("") || password.equals("")) {
             System.out.println("Вы не авторизированы");
             return;
         }
-        sender.sendObject(new SerializedObjectCommand(commandInvoker.getCommandMap().get("count_by_group_admin"),
+        requestHandler(new SerializedObjectCommand(commandInvoker.getCommandMap().get("count_by_group_admin"),
                 elementCreator.createPerson(), login, password));
-
-        receiver.receive(socketChannel);
     }
 
     @Override
-    public void register(String login, String password) throws IOException, InterruptedException, ClassNotFoundException {
-        sender.sendObject(new SerializedCommand(register, login, password));
-
-        receiver.receive(socketChannel);
+    public void register(String login, String password) throws InterruptedException, ClassNotFoundException {
+        requestHandler(new SerializedCommand(register, login, password));
     }
 
     @Override
@@ -224,28 +205,20 @@ public class CommandReceiverImp implements CommandReceiver {
                     if (studyGroup != null) {
                         switch (command.split(" ")[0]) {
                             case "add":
-                                sender.sendObject(new SerializedObjectCommand(commandInvoker.getCommandMap().get("add"),
+                                requestHandler(new SerializedObjectCommand(commandInvoker.getCommandMap().get("add"),
                                         studyGroup, login, password));
-
-                                receiver.receive(socketChannel);
                                 break;
                             case "update":
-                                sender.sendObject(new SerializedCombinedCommand(commandInvoker.getCommandMap().get("update"),
+                                requestHandler(new SerializedCombinedCommand(commandInvoker.getCommandMap().get("update"),
                                         elementCreator.createStudyGroup(), command.split(" ")[1], login, password));
-
-                                receiver.receive(socketChannel);
                                 break;
                             case "remove_greater":
-                                sender.sendObject(new SerializedObjectCommand(commandInvoker.getCommandMap().get("remove_greater"),
+                                requestHandler(new SerializedObjectCommand(commandInvoker.getCommandMap().get("remove_greater"),
                                         studyGroup, login, password));
-
-                                receiver.receive(socketChannel);
                                 break;
                             case "remove_lower":
-                                sender.sendObject(new SerializedObjectCommand(commandInvoker.getCommandMap().get("remove_lower"),
+                                requestHandler(new SerializedObjectCommand(commandInvoker.getCommandMap().get("remove_lower"),
                                         studyGroup, login, password));
-
-                                receiver.receive(socketChannel);
                                 break;
                         }
                     }
@@ -259,10 +232,8 @@ public class CommandReceiverImp implements CommandReceiver {
                     }
                     Person person = elementCreator.createScriptPerson(parameters);
                     if (person != null) {
-                        sender.sendObject(new SerializedObjectCommand(commandInvoker.getCommandMap().get("count_by_group_admin"),
+                        requestHandler(new SerializedObjectCommand(commandInvoker.getCommandMap().get("count_by_group_admin"),
                                 person, login, password));
-
-                        receiver.receive(socketChannel);
                     }
                 } else if (line.split(" ")[0].equals("execute_script")
                         && line.split(" ")[1].equals(((ExecuteScript)commandInvoker.getCommandMap().get("execute_script")).getPath())) {
@@ -272,6 +243,33 @@ public class CommandReceiverImp implements CommandReceiver {
             }
         } catch (IOException | InterruptedException | ClassNotFoundException e) {
             System.out.println("Ошибка! " + e.getMessage());
+        }
+    }
+
+    private void requestHandler(Object serializedObject) throws InterruptedException, ClassNotFoundException {
+        try {
+            socketChannel.configureBlocking(false);
+            socketChannel.register(selector, SelectionKey.OP_WRITE);
+            while (selector.select() > 0) {
+                Iterator<SelectionKey> iterator = selector.selectedKeys().iterator();
+                while (iterator.hasNext()) {
+                    SelectionKey selectionKey = iterator.next();
+                    iterator.remove();
+                    if (selectionKey.isWritable()) {
+                        socketChannel.register(selector, SelectionKey.OP_READ);
+                        sender.sendObject(serializedObject);
+                    }
+                    if (selectionKey.isReadable()) {
+                        receiver.receive(socketChannel);
+                        return;
+                    }
+                }
+            }
+        } catch (PortUnreachableException e) {
+            System.out.println("Не удалось получить данные по указанному порту/сервер не доступен");
+            System.exit(0);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
