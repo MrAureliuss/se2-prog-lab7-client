@@ -22,7 +22,6 @@ public class CommandReceiverImp implements CommandReceiver {
     private final CommandInvoker commandInvoker;
     private final Sender sender;
     private final SocketChannel socketChannel;
-    private final Integer delay = 500;
     private final ElementCreator elementCreator;
     private final Receiver receiver;
     private final Register register;
@@ -58,7 +57,7 @@ public class CommandReceiverImp implements CommandReceiver {
             return;
         }
         sender.sendObject(new SerializedCommand(commandInvoker.getCommandMap().get("info"), login, password));
-        Thread.sleep(delay);
+
         receiver.receive(socketChannel);
     }
 
@@ -69,7 +68,7 @@ public class CommandReceiverImp implements CommandReceiver {
             return;
         }
         sender.sendObject(new SerializedCommand(commandInvoker.getCommandMap().get("show"), login, password));
-        Thread.sleep(delay);
+
         receiver.receive(socketChannel);
     }
 
@@ -80,7 +79,7 @@ public class CommandReceiverImp implements CommandReceiver {
             return;
         }
         sender.sendObject(new SerializedObjectCommand(commandInvoker.getCommandMap().get("add"), elementCreator.createStudyGroup(), login, password));
-        Thread.sleep(delay);
+
         receiver.receive(socketChannel);
     }
 
@@ -92,7 +91,7 @@ public class CommandReceiverImp implements CommandReceiver {
         }
         sender.sendObject(new SerializedCombinedCommand(commandInvoker.getCommandMap().get("update"),
                 elementCreator.createStudyGroup(), ID, login, password));
-        Thread.sleep(delay);
+
         receiver.receive(socketChannel);
     }
 
@@ -103,7 +102,7 @@ public class CommandReceiverImp implements CommandReceiver {
             return;
         }
         sender.sendObject(new SerializedArgumentCommand(commandInvoker.getCommandMap().get("remove_by_id"), ID, login, password));
-        Thread.sleep(delay);
+
         receiver.receive(socketChannel);
     }
 
@@ -114,7 +113,7 @@ public class CommandReceiverImp implements CommandReceiver {
             return;
         }
         sender.sendObject(new SerializedCommand(commandInvoker.getCommandMap().get("clear"), login, password));
-        Thread.sleep(delay);
+
         receiver.receive(socketChannel);
     }
 
@@ -132,7 +131,7 @@ public class CommandReceiverImp implements CommandReceiver {
             return;
         }
         sender.sendObject(new SerializedCommand(commandInvoker.getCommandMap().get("head"), login, password));
-        Thread.sleep(delay);
+
         receiver.receive(socketChannel);
     }
 
@@ -144,7 +143,7 @@ public class CommandReceiverImp implements CommandReceiver {
         }
         sender.sendObject(new SerializedObjectCommand(commandInvoker.getCommandMap().get("remove_greater"),
                 elementCreator.createStudyGroup(), login, password));
-        Thread.sleep(delay);
+
         receiver.receive(socketChannel);
     }
 
@@ -156,7 +155,7 @@ public class CommandReceiverImp implements CommandReceiver {
         }
         sender.sendObject(new SerializedObjectCommand(commandInvoker.getCommandMap().get("remove_lower"),
                 elementCreator.createStudyGroup(), login, password));
-        Thread.sleep(delay);
+
         receiver.receive(socketChannel);
     }
 
@@ -167,7 +166,7 @@ public class CommandReceiverImp implements CommandReceiver {
             return;
         }
         sender.sendObject(new SerializedCommand(commandInvoker.getCommandMap().get("min_by_semester_enum"), login, password));
-        Thread.sleep(delay);
+
         receiver.receive(socketChannel);
     }
 
@@ -178,7 +177,7 @@ public class CommandReceiverImp implements CommandReceiver {
             return;
         }
         sender.sendObject(new SerializedCommand(commandInvoker.getCommandMap().get("max_by_group_admin"), login, password));
-        Thread.sleep(delay);
+
         receiver.receive(socketChannel);
     }
 
@@ -190,14 +189,14 @@ public class CommandReceiverImp implements CommandReceiver {
         }
         sender.sendObject(new SerializedObjectCommand(commandInvoker.getCommandMap().get("count_by_group_admin"),
                 elementCreator.createPerson(), login, password));
-        Thread.sleep(delay);
+
         receiver.receive(socketChannel);
     }
 
     @Override
     public void register(String login, String password) throws IOException, InterruptedException, ClassNotFoundException {
         sender.sendObject(new SerializedCommand(register, login, password));
-        Thread.sleep(delay);
+
         receiver.receive(socketChannel);
     }
 
@@ -227,25 +226,25 @@ public class CommandReceiverImp implements CommandReceiver {
                             case "add":
                                 sender.sendObject(new SerializedObjectCommand(commandInvoker.getCommandMap().get("add"),
                                         studyGroup, login, password));
-                                Thread.sleep(delay);
+
                                 receiver.receive(socketChannel);
                                 break;
                             case "update":
                                 sender.sendObject(new SerializedCombinedCommand(commandInvoker.getCommandMap().get("update"),
                                         elementCreator.createStudyGroup(), command.split(" ")[1], login, password));
-                                Thread.sleep(delay);
+
                                 receiver.receive(socketChannel);
                                 break;
                             case "remove_greater":
                                 sender.sendObject(new SerializedObjectCommand(commandInvoker.getCommandMap().get("remove_greater"),
                                         studyGroup, login, password));
-                                Thread.sleep(delay);
+
                                 receiver.receive(socketChannel);
                                 break;
                             case "remove_lower":
                                 sender.sendObject(new SerializedObjectCommand(commandInvoker.getCommandMap().get("remove_lower"),
                                         studyGroup, login, password));
-                                Thread.sleep(delay);
+
                                 receiver.receive(socketChannel);
                                 break;
                         }
@@ -262,7 +261,7 @@ public class CommandReceiverImp implements CommandReceiver {
                     if (person != null) {
                         sender.sendObject(new SerializedObjectCommand(commandInvoker.getCommandMap().get("count_by_group_admin"),
                                 person, login, password));
-                        Thread.sleep(delay);
+
                         receiver.receive(socketChannel);
                     }
                 } else if (line.split(" ")[0].equals("execute_script")
