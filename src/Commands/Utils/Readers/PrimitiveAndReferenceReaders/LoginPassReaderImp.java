@@ -24,6 +24,10 @@ public class LoginPassReaderImp implements LoginPassReader {
         String password = hashEncrypter.encryptString("111");
 
 //        Console console = System.console();
+//        if (console == null){
+//            System.out.println("Запускайте из консоли");
+//            System.exit(0);
+//        }
 //
 //        String type = console.readLine("Приветствуем! Вы уже зарегистрированы? [Да/Нет] ").trim().toUpperCase();
 //        if (type.equals("ДА")) {
