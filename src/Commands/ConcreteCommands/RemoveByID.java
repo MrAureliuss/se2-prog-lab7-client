@@ -26,6 +26,6 @@ public class RemoveByID extends Command {
 
     @Override
     protected String writeInfo() {
-        return "Команда remove_by_id. Синтаксис: remove_by_id id – удалить элемент из коллекции по его id.";
+        return "Команда remove_by_id – синтаксис: remove_by_id id – удалить элемент из коллекции по его id.";
     }
 }

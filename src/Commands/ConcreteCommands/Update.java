@@ -26,6 +26,6 @@ public class Update extends Command {
 
     @Override
     protected String writeInfo() {
-        return "Команда update. Синтаксис: update id – обновить значение элемента коллекции, id которого равен заданному.";
+        return "Команда update – синтаксис: update id – обновить значение элемента коллекции, id которого равен заданному.";
     }
 }
