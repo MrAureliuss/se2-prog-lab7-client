@@ -31,18 +31,18 @@ public class LoginPassReaderImp implements LoginPassReader {
 
         String type = console.readLine("Приветствуем! Вы уже зарегистрированы? [Да/Нет] ").trim().toUpperCase();
         if (type.equals("ДА")) {
-            login = console.readLine("Введите логин: ");
+            login = console.readLine("Введите логин: ").trim();
             char[] passwordArray = console.readPassword("Введите Ваш очень нужный пароль: ");
-            password = hashEncrypter.encryptString(new String(passwordArray));
+            password = hashEncrypter.encryptString(new String(passwordArray)).trim();
 
         } else if (type.equals("НЕТ")) {
-            login = console.readLine("Введите логин: ");
+            login = console.readLine("Введите логин: ").trim();
             char[] passwordArray = console.readPassword("Введите Ваш очень нужный пароль: ");
             char[] passwordArrayCheck;
 
             do {
                 passwordArrayCheck = console.readPassword("Введите Ваш очень нужный пароль еще раз: ");
-                password = hashEncrypter.encryptString(new String(passwordArray));
+                password = hashEncrypter.encryptString(new String(passwordArray)).trim();
             } while (!Arrays.equals(passwordArray, passwordArrayCheck));
 
             commandReceiver.register(login, password);
